@@ -1,5 +1,6 @@
 package com.example.chatapplication
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,6 +24,11 @@ class Login : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
 
 
+
+
+
+
+
         edtEmail = findViewById(R.id.email)
         edtPassword = findViewById(R.id.password)
         btnLogin = findViewById(R.id.login_btn)
@@ -43,14 +49,34 @@ class Login : AppCompatActivity() {
 
 
         }
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        if (isLoggedIn) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
+
+
+
+
     private fun login(email:String, password:String){
 //logic for log in
+
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val intent = Intent(this,MainActivity::class.java)
+                    val intent = Intent(this, MainActivity::class.java)
                     finish()
+                    val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putBoolean("isLoggedIn", true)
+                    editor.apply()
+
+
+
+
                     startActivity(intent)
 
 
@@ -59,6 +85,6 @@ class Login : AppCompatActivity() {
 
                 }
             }
+            }
 
     }
-}

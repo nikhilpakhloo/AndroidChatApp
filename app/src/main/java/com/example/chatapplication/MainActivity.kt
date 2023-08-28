@@ -1,5 +1,6 @@
 package com.example.chatapplication
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -63,6 +64,10 @@ class MainActivity : AppCompatActivity() {
         if(item.itemId ==R.id.logout){
             //write logic for logout
             mAuth.signOut()
+            val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.clear()
+            editor.apply()
             val intent = Intent(this,Login::class.java)
             startActivity(intent)
             finish()
